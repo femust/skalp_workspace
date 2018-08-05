@@ -1,15 +1,15 @@
 #!/usr/bin/env python
 import rospy
-from geometry_msgs.msg import ####
+from geometry_msgs.msg import Twist
 
 def move():
     # START
     # 2 lines init node and publisher
-
-    velocity_publisher=
+    rospy.init_node("vel_publisher")
+    velocity_publisher=rospy.Publisher("/turtle1/cmd_vel",Twist,queue_size=10)
     # END
 
-    vel_msg = ####
+    vel_msg = Twist();
 
     # Receiveing the user's input
     print("Poruszmy robota")
@@ -19,15 +19,15 @@ def move():
 
     # Checking if the movement is forward or backwards
     if (isForward):
-        vel_msg.#### = abs(speed)
+        vel_msg.linear.x = abs(speed)
     else:
-        vel_msg.#### = -abs(speed)
+        vel_msg.linear.x = -abs(speed)
     # Since we are moving just in x-axis
-    vel_msg.#### = 0
-    vel_msg.#### = 0
-    vel_msg.#### = 0
-    vel_msg.#### = 0
-    vel_msg.#### = 0
+    vel_msg.linear.y = 0
+    vel_msg.linear.z = 0
+    vel_msg.angular.x = 0
+    vel_msg.angular.y = 0
+    vel_msg.angular.z = 0
 
     while not rospy.is_shutdown():
 
@@ -36,13 +36,13 @@ def move():
         current_distance = 0
 
         while (current_distance < distance):
-            velocity_publisher.publish(####)
+            velocity_publisher.publish(vel_msg)
             t1 = rospy.Time.now().to_sec()
             current_distance = speed * (t1 - t0)
 
         # Zatrzymanie robota, gdy juz dotarl do pozycji
         vel_msg.linear.x = 0
-        velocity_publisher.publish(####)
+        velocity_publisher.publish(vel_msg)
 
 if __name__ == '__main__':
     try:
